@@ -6,4 +6,5 @@ npm i babel-core babel-preset-env
 babel-plugin-transform-react-jsx --save-dev
 # 上面两个是依赖，最后一个才是核心
 ```
-
+- [ ]使用TypeScript重构
+- [ ]类型判断优化
