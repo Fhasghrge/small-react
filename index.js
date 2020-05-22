@@ -1,5 +1,6 @@
 import React from './react/index'
 import ReactDOM from './react-dom'
+import './index.css'
 
 const app = (
   <div className='active' title='shuang'>
@@ -22,5 +23,47 @@ const app = React.createElement("div", {
   title: "shuang"
 }, "hello world!");
 */
+class Demo extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      count: 1
+    }
+  }
+  componentWillMount() {
+    console.log('组件将要加载')
+  }
+  componentWillReceiveProps(props) {
+    console.log('组件将要更新props')
+  }
+  componentWillUpdate() {
+    console.log('组件将要更新')
+  }
+  componentDidMount() {
+    console.log('组件已经加载')
+  }
+  componentDidUpdate() {
+    console.log('组件更行完成')
+  }
+  handleAdd() {
+    this.setState({
+      count: this.state.count + 1
+    })
+  }
+  handleDec() {
+    this.setState({
+      count: this.state.count - 1
+    })
+  }
+  render() {
+    return (
+      <div className='active' title='shuang'>
+        <div>{this.state.count}</div>
+        <button onClick = {this.handleAdd.bind(this)}>+</button>
+        <button onClick = {this.handleDec.bind(this)}>-</button>
+      </div>
+    )
+  }
+}
 
-ReactDOM.render(<Home name={title}/>, document.querySelector('#root'))
+ReactDOM.render(<Demo name={title}/>, document.querySelector('#root'))

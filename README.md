@@ -9,5 +9,5 @@ babel-plugin-transform-react-jsx --save-dev
 - 接收函数组件和类组件转换成DOM节点
 
 #### TODO:
-- [ ]使用TypeScript重构
-- [ ]类型判断优化
+- [ ] 使用TypeScript重构
+- [ ] 类型判断优化
