@@ -59,11 +59,12 @@ class Demo extends React.Component {
     return (
       <div className='active' title='shuang'>
         <div>{this.state.count}</div>
-        <button onClick = {this.handleAdd.bind(this)}>+</button>
-        <button onClick = {this.handleDec.bind(this)}>-</button>
+        <button onClick={this.handleAdd.bind(this)}>+</button>
+        <button onClick={this.handleDec.bind(this)}>-</button>
       </div>
     )
   }
 }
 
-ReactDOM.render(<Demo name={title}/>, document.querySelector('#root'))
+ReactDOM.render(<Demo name={title} />, document.querySelector('#root'))
+// ReactDOM.render(app, document.querySelector('#root'))

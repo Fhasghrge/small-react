@@ -1,4 +1,5 @@
 import Component from '../react/component'
+import {diff, diffNode} from './diff';
 
 const ReactDOM = {
   render
@@ -11,12 +12,13 @@ const ReactDOM = {
  * @param {*} vnode 
  * @param {*} container 
  */
-function render(vnode, container) {
-  return container.appendChild(_render(vnode))
+function render(vnode, container, dom) {
+  // return container.appendChild(_render(vnode))
+  return diff(dom, vnode, container)
 }
 
 // 统一转换成类组件
-function createComponent(comp, props) {
+export function createComponent(comp, props) {
   let inst;
   // 如果是类组件
   if (comp.prototype && comp.prototype.render) {
@@ -34,26 +36,27 @@ function createComponent(comp, props) {
 export function renderComponent(comp) {
   let base;
   const renderer = comp.render()
-  base = _render(renderer)
+  // base = _render(renderer)
+  base = diffNode(comp.base, renderer)
   if (comp.base) {
     comp.componentWillUpdate && comp.componentWillUpdate()
   }
   if (comp.base) {
     comp.componentDidUpdate && comp.componentDidUpdate()
-  } else if (comp.componentDidMount) {
-    comp.componentDidMount()
+  } else {
+    comp.componentDidMount && comp.componentDidMount()
   }
-  if (comp.base && comp.base.parentNode) {
-    comp.base.parentNode.replaceChild(base, comp.base)
-  }
+  // if (comp.base) {
+  //   comp.base.parentNode && comp.base.parentNode.replaceChild(base, comp.base)
+  // }
   comp.base = base
 }
 // 对类组件进行统一处理成DOM对象
-function setComponentProps(comp, props) {
+export function setComponentProps(comp, props) {
   if (!comp.base) {
     comp.componentWillMount && comp.componentWillMount()
-  } else if (comp.componentWillReceiveProps) {
-    comp.componentWillReceiveProps()
+  } else {
+    comp.componentWillReceiveProps && comp.componentWillReceiveProps()
   }
   comp.props = props
   renderComponent(comp)
@@ -62,14 +65,14 @@ function _render(vnode) {
 
   if (vnode === undefined || vnode === null || typeof vnode === 'boolean') return
 
-  if(typeof vnode === 'number') vnode = String(vnode)
+  if (typeof vnode === 'number') vnode = String(vnode)
   if (typeof vnode === 'string') { // 判断的优化
     return document.createTextNode(vnode)
   }
 
   //如果是函数组件或者类组件
   if (typeof vnode.tag === 'function') {
-    // 1.创建组件
+    // 1.创建组件实例
     const comp = createComponent(vnode.tag, vnode.attrs)
     // 2.设置组件的属性
     setComponentProps(comp, vnode.attrs)
@@ -87,7 +90,6 @@ function _render(vnode) {
       })
     }
     // 渲染子节点
-    
     vnode.childrens && vnode.childrens.forEach(child => {
       render(child, dom)
     })
@@ -98,7 +100,7 @@ function _render(vnode) {
 /**
  * 对属性进行绑定
  */
-function setAttribute(dom, key, value) {
+export function setAttribute(dom, key, value) {
   if (key === 'className') {
     key = 'class'
   }
